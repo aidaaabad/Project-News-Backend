@@ -53,7 +53,7 @@ exports.signup=async(req,res)=>{
     const {userName,password,fullName}=req.body
     const hashedPass=await Helper.Hash(password)
     const user=new User({userName,password:hashedPass,fullName,LastLogin:Date.now()})
-
+   
     if(user.userName){
         const validUser=await User.findOne({userName:user.userName})
         if(validUser){
@@ -61,9 +61,9 @@ exports.signup=async(req,res)=>{
          return
         }
     }
-
-    await user.save()
     const token=await Helper.GenerateToken(user)
+    user.token=token
+    await user.save()
     res.status(201).json({user,token})
 }
 
@@ -75,6 +75,9 @@ exports.login=async(req,res)=>{
     return
    }
    const validPassword=await Helper.Compare(password,validUser.password)
+   console.log("validPassword",validPassword)
+   console.log("password",password)
+   console.log("validUser.password",validUser.password)
    if(!validPassword){
     res.json({message:'Invalid Password'})
     return

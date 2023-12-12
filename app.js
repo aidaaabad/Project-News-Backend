@@ -3,6 +3,7 @@ const app=express()
 const mongoose=require('mongoose')
 const userRoutes=require('./routes/user-routers')
 const homeRoutes=require('./routes/home-routers')
+const newsRoutes=require('./routes/news-router')
 require('dotenv').config();
 const { PORT, MONGO_DB, MONGO_PORT,MONGO_HOSTNAME } = process.env;
 
@@ -10,6 +11,7 @@ const { PORT, MONGO_DB, MONGO_PORT,MONGO_HOSTNAME } = process.env;
 
 app.use(express.json())
 app.use('/api/admin',userRoutes)
+app.use('/api/news',newsRoutes)
 app.use("/", homeRoutes);
 
 // catch 404 and forward to error handler
